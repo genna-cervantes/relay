@@ -19,7 +19,7 @@
       "title": "Relay",
       "subtitle": "Upload File over SSH",
       "description": "Send local files to a remote machine and copy their remote path.",
-      "mode": "no-view"
+      "mode": "view"
     }
   ],
   "dependencies": {
