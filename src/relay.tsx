@@ -24,6 +24,13 @@ async function uploadImage(localPath: string) {
   });
 
   try {
+    await execFileAsync("/usr/bin/ssh", [
+      remoteHost,
+      "mkdir",
+      "-p",
+      remoteDirectory,
+    ]);
+
     await execFileAsync("/usr/bin/scp", [
       localPath,
       `${remoteHost}:${remotePath}`,
@@ -36,7 +43,7 @@ async function uploadImage(localPath: string) {
     toast.message = "Remote path copied";
   } catch (error) {
     console.log(error)
-    
+
     toast.style = Toast.Style.Failure;
     toast.title = "Upload failed";
     toast.message =
