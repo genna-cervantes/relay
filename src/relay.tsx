@@ -35,6 +35,8 @@ async function uploadImage(localPath: string) {
     toast.title = "Image uploaded";
     toast.message = "Remote path copied";
   } catch (error) {
+    console.log(error)
+    
     toast.style = Toast.Style.Failure;
     toast.title = "Upload failed";
     toast.message =
