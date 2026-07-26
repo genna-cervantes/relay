@@ -1,34 +1,44 @@
-import { Clipboard, Detail } from "@raycast/api";
+import { Clipboard, Detail, Grid } from "@raycast/api";
+import { fileURLToPath } from "node:url";
 import { useEffect, useState } from "react";
 
 export default function Command() {
-  const [output, setOutput] = useState("Loading...");
+
+  const [clipboardImages, setClipboardImages] = useState<string[]>([])
 
   useEffect(() => {
-    async function inspectHistory() {
-      const results = [];
 
-      for (let offset = 0; offset < 5; offset++) {
-        try {
-          const item = await Clipboard.read({ offset });
+    async function loadClipboardImages(){
+      const results: string[] = []
 
-          results.push({
-            offset,
-            item,
-          });
-        } catch (error) {
-          results.push({
-            offset,
-            error: String(error),
-          });
+      for (let offset = 0; offset < 5; offset++){
+        const clipItem = await Clipboard.read({offset})
+        if (!clipItem.file){
+          continue;
         }
+        const path = fileURLToPath(clipItem.file);
+        results.push(path)
       }
 
-      setOutput(`\`\`\`json\n${JSON.stringify(results, null, 2)}\n\`\`\``);
+      setClipboardImages(results)
     }
 
-    void inspectHistory();
-  }, []);
+    loadClipboardImages()
 
-  return <Detail markdown={output} />;
+  }, [])
+
+  return (
+    <>
+      Clipboard Images
+      <Grid>
+        {clipboardImages.map((image) => (
+          <Grid.Item
+            key={image}
+            title={image}
+            content={{ source: image }}
+          />
+        ))}
+      </Grid>
+    </>
+  );
 }
