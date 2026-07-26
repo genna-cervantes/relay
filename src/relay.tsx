@@ -1,6 +1,5 @@
-import { Clipboard, Detail, Grid, ActionPanel, Action, showToast, Toast, getPreferenceValues } from "@raycast/api";
+import { Clipboard, Detail, Grid, ActionPanel, Action, showToast, Toast, getPreferenceValues, showHUD } from "@raycast/api";
 import { execFile } from "node:child_process";
-import { basename } from "node:path";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import { useEffect, useState } from "react";
@@ -15,7 +14,7 @@ async function uploadImage(localPath: string) {
       remoteHost: string;
     }>();
 
-  const filename = basename(localPath);
+  const filename = `clipboard-${Date.now()}.png`;
   const remotePath = `${remoteDirectory}/${filename}`;
 
   const toast = await showToast({
@@ -38,9 +37,9 @@ async function uploadImage(localPath: string) {
 
     await Clipboard.copy(remotePath);
 
-    toast.style = Toast.Style.Success;
-    toast.title = "Image uploaded";
-    toast.message = "Remote path copied";
+    toast.hide();
+
+    await showHUD("Uploaded — remote path copied");
   } catch (error) {
     console.log(error)
 
