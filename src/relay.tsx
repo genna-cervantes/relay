@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 const execFileAsync = promisify(execFile);
 
-const remoteDirectory = "/home/relay/uploads";
+const remoteDirectory = "~/relay/uploads";
 
 async function uploadImage(localPath: string) {
   const { remoteHost } =
